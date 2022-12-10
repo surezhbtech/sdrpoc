@@ -1,0 +1,970 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Structural Defect Reporting</title>
+    <!-- Insert this script -->
+    <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body{
+            user-select: none;
+            background: black;
+            font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+        }
+        a:hover {
+            text-decoration:none;
+        }
+        a:focus{
+            text-decoration:none;
+        }
+        .structural-head{
+            background: #0da6e0;
+        }
+        .structural-head a, .model-specific label{
+            color: #fff;
+            font-weight: 100;
+        }
+        .navbar-nav.structural-h2{
+            float:none;
+        }
+        .structural-h2 li{
+            width: 13%;
+        }
+        .structural-h2 li a{
+            color:#00a1de;
+        }
+        .brand{
+            /*background-image: url("./images/airfrance-klm.jpg");*/
+            height: 42px;
+            width: 100px;
+            background-size: 89%;
+            background-repeat: no-repeat;
+            background-position: 13px 4px;)
+        }
+        .nav-sdm{
+            background: #0da6e0;
+            border-radius: 6px;
+            padding: 8px;
+        }
+        .klmbackground-img{
+            background-repeat: no-repeat;
+            background-size: cover;
+            background: black;
+            background-image: linear-gradient(black,#3d463d);
+        }
+        .nav-sdm a.navbar-brand strong, {
+            color:#ffff;
+            font-weight: 100;
+        }
+        .card, #annoName, #annoDescr{
+            border-color: #00a1de;
+            color: #828180;
+        }
+        .btn.disabled, .btn:disabled {
+            opacity: .65;
+            color: #fff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+        }
+        h1.flight-details{
+            color:#fff;
+            font-size: 40px;
+        }
+        row .pt-3{
+            padding-top: 3% !important;
+        }
+        h3{
+            font-weight: 300;
+        }
+        .g-legal-footer{
+            margin-top: 1px;
+            background-color: #FFF;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .klm-img{
+            background-image: url("./klmBrand.png");
+            background-repeat: no-repeat;
+            height: 49px;
+            width: 117px;
+            background-size: 100%;
+            margin: 5px;
+            filter: drop-shadow(6px 6px 3px #717375);
+        }
+        .pad-border{
+            border-right: 1px solid #eaeaea;
+            padding-right: 18px;
+        }
+        iframe{
+            border: none;
+            width:100%;
+        }
+        #clearAllView{
+            position: absolute;
+            right: 3%;
+            bottom: 20%;
+            width: 10%;
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+        }
+        #bottomView{
+            position: absolute;
+            right: 3%;
+            bottom: 65%;
+            background-color: #080000;
+            border: 1px solid #1a9aff;
+            background-image: url("./bottomView.png");
+            background-repeat: no-repeat;
+            height: 55px;
+            width: 55px;
+            border-radius: 50%;
+            background-size: 94%;
+            background-position-y: 72%;
+        }
+        #topView{
+            position: absolute;
+            background-color: #080000;
+            border: 1px solid #1a9aff;
+            bottom: 78%;
+            right: 3%;
+            background-image:url("./topView.png");
+            background-repeat: no-repeat;
+            height: 55px;
+            width: 55px;
+            background-size: 103%;
+            border-radius: 50%;
+            background-position: 24%;
+        }
+        #markAnno{
+            position: absolute;
+            right: 3%;
+            bottom: 11%;
+            width: 10%;
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+        }
+        #saveAnno{
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+        }
+        #loadModel{
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+            border-radius: 4px;
+            padding: 7px;
+            font-size: 14px;
+        }
+        .mt-10{
+            margin-top:10px;
+        }
+        .mt-25{
+            margin-top: 25px;
+        }
+        .mt-0{
+            margin-top:0px;
+        }
+        .mb-0{
+            margin-bottom:0px;
+        }
+        .btn-klm{
+            width: 20%;
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+            border-radius: 4px;
+            padding: 2%;
+        }
+        .head-sdr{
+            padding-top: 15px;
+            padding-bottom: 15px;
+            line-height: 28px;
+            position: relative;
+            display: block;
+            padding: 10px 15px;
+            color: #ffff;
+        }
+        .head-sdr.shad{
+            font-size:20px;
+            filter: drop-shadow(6px 6px 3px #717375);
+            user-select:none;
+        }
+        .black,.panel-heading.black{
+            background-color: black;
+            color: #fff;
+            border-color: #928181;
+        }
+        .gly-sdr{
+            height: 50px;
+            width: 50px;
+            border: 3px solid #e77b2f;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+        .gly-sdr span {
+            top: 17%;
+            left: 19%;
+            color: white;
+            font-size: 28px;
+        }
+        .border-all{
+            border: 1px solid #ffff;
+        }
+        #accordion .form-control{
+            height:25px;
+        }
+        .klmbackground-img .container{
+            width: 95%;
+        }
+        .txt-upload{
+            right: 56%;
+            padding: 4px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 90%;
+        }
+        .custom-file-upload{
+            left: 9%;
+            bottom: 31px;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+            width: 47%;
+            color: #ffff;
+            background-color: #e77b2f;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.12);
+            border: solid 1px #e77b2f;
+        }
+        input[type=file] {
+            display: none;
+        }
+        #accordion .form-control.damage-des, textarea{
+            height:auto;
+        }
+        ul.nav.navbar-nav.structural-h2 {
+            text-align: center;
+        }
+        .structural-h2 li.active {
+            background: #00a1de;
+        }
+        .structural-h2 li.active a{
+            color: #ffff;
+        }
+
+        /*Start of Toast css*/
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #00a1de;
+            color: #ffff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+        }
+
+        @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+
+        @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+        /*End of toast CSS*/
+
+
+        @media screen and (max-width: 600px) {
+            .structural-head div ul:nth-of-type(2){
+                display: none;
+            }
+            .structural-head div ul li{
+                float: left;
+            }
+            .structural-head div ul li:nth-of-type(1){
+                margin-left: 16%;
+            }
+            .structural-head div ul li:nth-of-type(2){
+                font-size: 22px;
+            }
+            nav.navbar.panel{
+                display:none;
+            }
+            .uploads
+            {
+                margin-left: 45%;
+                margin-top: 16%;
+            }
+            #markAnno, #clearAllView{
+                right: 6%;
+                width: 15%;
+            }
+            #topView, #bottomView{
+                right: 6%;
+            }
+        }
+        @media (min-width: 600px) and (max-width: 800px) {
+            nav.navbar.panel{
+                display:none;
+            }
+            .structural-head div ul:nth-of-type(2){
+                display: none;
+            }
+        }
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+            .uploads{
+                margin-top: 10%
+            }
+            .custom-file-upload{
+                width:30%;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+<!-- Main navigation -->
+<header>
+    <nav class="structural-head">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li class="active klm-img"></li>
+                <li>
+                    <div class="head-sdr shad">STRUCTURAL
+                        DEFECT REPORTING</div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="head-sdr">FAQ</div>
+                </li>
+                <li>
+                    <div class="head-sdr"> English</div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!--start of Tabs-->
+<nav class="navbar panel">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav structural-h2">
+            <li class="active">
+                <div class="head-sdr">Defects</div>
+            </li>
+            <li><a href="#">Maintenance</a></li>
+            <li><a href="#">Organisation</a></li>
+            <li><a href="#">Processs</a></li>
+            <li class="text-center"><a href="#">Library</a></li>
+
+            <li class="pull-right"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+    </div>
+</nav>
+<!--End of Tabs-->
+<!--start of model specifications-->
+<div class="model-specific">
+    <div class="form-group col-md-3">
+        <label for="aircraftmodel">Aircraft Model</label>
+        <select class="form-control" id="aircraftmodel">
+            <option>Airbus A320</option>
+            <option>Airbus A319</option>
+            <option>Airbus A318</option>
+            <option>Airbus A310</option>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="airline">Airlines</label>
+        <select class="form-control" id="airline">
+            <option>KLM</option>
+            <option>Air France</option>
+            <option>Jet Airways</option>
+            <option>Delta</option>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="registration">Registration Code</label>
+        <select class="form-control" id="registration">
+            <option>PH-BCA</option>
+            <option>PH-AAA</option>
+            <option>PH-ZCA</option>
+            <option>ZH-BCA</option>
+        </select>
+    </div>
+    <div class="form-group col-md-1">
+        <button class="btn btn-primary btn-lg btn-block mt-25" id="loadModel">Load</button>
+    </div>
+    <!-- Navbar -->
+    <!-- Full Page Intro -->
+    {{!-- <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/31.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+        <!-- Mask & flexbox options--> --}}
+    <div class=" klmbackground-img">
+        <!-- Content -->
+        <div class="container">
+            <!--Grid row-->
+            <div class="row mt-lg-5">
+                <!--Grid column-->
+                <div class="col-md-9" data-wow-delay="0.3s">
+                    <h6 class="mb-3 iframe-height">
+                        <iframe src="" id="api-frame" height="500" width="500"></iframe>
+                    </h6>
+                    <div>
+                        <button class="btn" id="topView"></button>
+                        <button class="btn" id="bottomView"></button>
+                        <!-- <button class="btn" id="clearAllView">Clear</button> -->
+                        <button class="btn" id="markAnno">Mark</button>
+                    </div>
+                </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-md-3 col-xl-5 mb-4">
+                    <!--Form-->
+                    <div style="height:500px;overflow-y:auto;padding-right: 10px">
+                        <div class="panel-group mt-10" id="accordion">
+                            <div class="panel panel-default black">
+                                <div class="panel-heading black">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Defect Details</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseOne" class="panel-collapse first collapse">
+                                    <div class="panel-body">
+                                        <div class="card wow fadeInRight" data-wow-delay="0.3s">
+                                            <div class="card-body z-depth-2">
+                                                <!--Header-->
+                                                <div class="md-form">
+                                                    <label>Defect Id</label>
+                                                    <input id="defectIdText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Date</label>
+                                                    <input id="dateText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Structural Classification</label>
+                                                    <input id="classificationText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Damaged Component</label>
+                                                    <input id="damagedComponentText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Mobile Element</label>
+                                                    <input id="mobileElementText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Damage Description</label>
+                                                    <textarea id="damagedDescriptionText" class="form-control damage-des" rows="3"></textarea>
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Location Side</label>
+                                                    <input id="locationSideText" type="text" class="form-control">
+                                                </div>
+                                                <div class="md-form">
+                                                    <label>Damage Type</label>
+                                                    <input id="damageTypeText" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default black">
+                                <div class="panel-heading black">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Evidence</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="md-form">
+                                            <label>References</label>
+                                            <input id="referenceText" type="text" class="form-control">
+                                        </div>
+                                        <div class="md-form">
+                                            <label>Reported by</label>
+                                            <input id="reportedByText" type="text" class="form-control">
+                                        </div>
+                                        <div class="gly-sdr pull-left">
+                                            <span class="glyphicon glyphicon-facetime-video"></span>
+                                        </div>
+                                        <div class="gly-sdr pull-right">
+                                            <span class="glyphicon glyphicon-camera"></span>
+                                        </div>
+                                        <div class="col-sm-10 mt-10 uploads">
+                                            <input type="text" class="txt-upload col-sm-3 col-sm-offset-6">
+                                            <input id="file-upload" accept="" type="file" style="visibility: hidden;" multiple="false">
+                                            <label for="file-upload" class="custom-file-upload col-sm-2 col-sm-offset-9">Upload</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default black">
+                                <div class="panel-heading black">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Repair Detail</a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <div class="md-form">
+                                            <label>Status</label>
+                                            <input id="statusText" type="text" class="form-control">
+                                        </div>
+                                        <div class="md-form">
+                                            <label>Owner</label>
+                                            <input id="ownerText" type="text" class="form-control">
+                                        </div>
+                                        <div class="md-form">
+                                            <label>References</label>
+                                            <input id="referencesText" type="text" class="form-control">
+                                        </div>
+                                        <div class="md-form">
+                                            <label>Repair Type</label>
+                                            <input id="repairTypeText" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-10 mt-3">
+                            <button style="margin-bottom: 10px;" class="btn" id="saveAnno">Save</button>
+                            <small id="annoRes" class="form-text text-muted" style="display: none; color: green">Saved Successfully</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/.Form-->
+        </div>
+        <!--Grid column-->
+    </div>
+    <!--Grid row-->
+</div>
+<!-- Content -->
+</div>
+<!-- Mask & flexbox options-->
+</div>
+<!-- Full Page Intro -->
+<div id="toast">
+    <div id="desc">Saved succesfully</div>
+</div>
+<footer>
+    <div class="g-legal-footer">
+        <div class="g-grid--row">
+            <a href="https://www.klm.com/travel/nl_nl/meta/sitemap/sitemap.htm" target="_self">Site map</a>
+
+            <a href="https://www.klm.com/travel/nl_nl/customer_support/customer_support/legal_information/index.htm" target="_self">Juridische
+                informatie</a>
+
+            <a href="https://www.klm.com/travel/nl_nl/customer_support/copyright_klm/index.htm" target="_self">© 2018 KLM</a>
+        </div>
+    </div>
+</footer>
+<!-- Main navigation -->
+
+<!-- Initialize the viewer -->
+<script type="text/javascript">
+    var annolist = [];
+    var modelsList = [];
+    var addDefectMode = false;
+    currentAnnotationToCreate = {};
+    markDefectMode = false;
+    cameraX = 0;
+    cameraY = 0;
+    cameraZ = 0;
+    targetX = 0;
+    targetY = 0;
+    targetZ = 0;
+    positionX = 0;
+    positionY = 0;
+    positionZ = 0;
+    normalX = 0;
+    normalY = 0;
+    normalZ = 0;
+    currentDefectId = 1;
+    var currentAircraftmodelSelected;
+    var currentAirlineSelected;
+    var currentRegistrationCodeSelected;
+    var cameraPosition;
+    var cameraTarget;
+    var currentDefectToUpdate;
+    var currentAnnotationToUpdate;
+    var sketchFabAPI;
+    var iframe = document.getElementById('api-frame');
+    var urlid = 'd8ea5a3faf7c4a75a51b640c2da8f111';
+    // By default, the latest version of the viewer API will be used.
+    var client = new Sketchfab(iframe);
+
+    // Controls
+
+    document.getElementById('loadModel').addEventListener('click', function () {
+        onLoadmodel();
+    });
+    document.getElementById('markAnno').addEventListener('click', function () {
+        document.getElementById('markAnno').disabled = true;
+        document.getElementById('saveAnno').disabled = true;
+        markDefectMode = true;
+        $('.panel-collapse').each(function () {
+            if ($(this).hasClass('in')) {
+                $(this).collapse('toggle');
+            }
+        });
+        clearForm();
+    });
+    $('#loadAnno').click(function () {
+        init();
+    });
+    // API
+    function onSuccess(api) {
+        sketchFabAPI = api;
+        api.addEventListener('annotationSelect', function (index) {
+            if (index != -1) {
+                api.getAnnotation(index, function (err, info) {
+                    if (info) {
+                        $('.panel-collapse').each(function () {
+                            if ($(this).hasClass('in') && !$(this).hasClass('first')) {
+                                $(this).collapse('toggle');
+                            }
+                        });
+                        if (!$("#collapseOne").hasClass('in')) {
+                            $("#collapseOne").collapse('toggle');
+                        }
+                        currentAnnotationToUpdate = info;
+                        currentDefectToUpdate = getAnnotationDetails((info.order));
+                        setFormDetails(currentDefectToUpdate);
+                    }
+                });
+            }
+        });
+        api.addEventListener('click', function (info) {
+            if (info.position2D !== null && markDefectMode) {
+                markDefectMode = false;
+                document.getElementById('markAnno').disabled = false;
+                document.getElementById('saveAnno').disabled = false;
+                positionX = info.position3D[0];
+                positionY = info.position3D[1] - 1;
+                positionZ = info.position3D[2];
+                if (info.normal[0] > 0) {
+                    info.normal[0] *= -1;
+                }
+                normalX = info.normal[0];
+                normalY = info.normal[1];
+                normalZ = info.normal[2];
+                api.getCameraLookAt(function (err, camera) {
+                    console.log("Camera::" + JSON.stringify(camera));
+                    console.log("Info:::" + JSON.stringify(info));
+                    cameraPosition = camera.position;
+                    cameraTarget = camera.target;
+                    //document.getElementById('saveAnno').disabled = false;
+                    document.getElementById('annoRes').style.display = "hidden";
+                    currentAnnotationToCreate = {
+                        pox: positionX,
+                        poy: positionY,
+                        poz: positionZ,
+                        nox: normalX,
+                        noy: normalY,
+                        noz: normalZ,
+                        camPos: cameraPosition,
+                        camTarget: cameraTarget,
+                        title: currentDefectId++,
+                        content: 'Defect Description',
+                        date: '',
+                        classification: '',
+                        damagedComponent: '',
+                        mobileElement: '',
+                        locationSide: '',
+                        damageType: '',
+                        reference: '',
+                        reportedBy: '',
+                        status: '',
+                        owner: '',
+                        references: '',
+                        repairTypeText: ''
+                    };
+                    var modelDetails;
+                    api.createAnnotation(
+                            [currentAnnotationToCreate.pox, currentAnnotationToCreate.poy, currentAnnotationToCreate.poz],
+                            [currentAnnotationToCreate.nox, currentAnnotationToCreate.noy, currentAnnotationToCreate.noz],
+                            currentAnnotationToCreate.camPos,
+                            currentAnnotationToCreate.camTarget,
+                            currentAnnotationToCreate.title,
+                            currentAnnotationToCreate.content,
+                            function (err, index) {
+                                api.gotoAnnotation(index);
+                                currentAnnotationToUpdate = currentAnnotationToCreate;
+                                var copiedObject = jQuery.extend(true, {}, currentAnnotationToCreate)
+                                checkForModel(copiedObject);
+                            }
+                    );
+                });
+            }
+        }, {
+            pick: 'fast'
+        });
+        api.start(function () {
+            console.log('started');
+            document.getElementById('saveAnno').addEventListener('click', function () {
+                currentDefectToUpdate.title = $('#defectIdText').val();
+                currentDefectToUpdate.content = $('#damagedDescriptionText').val();
+                currentDefectToUpdate.date = $('#dateText').val();
+                currentDefectToUpdate.classification = $('#classificationText').val();
+                currentDefectToUpdate.damagedComponent = $('#damagedComponentText').val();
+                currentDefectToUpdate.mobileElement = $('#mobileElementText').val();
+                currentDefectToUpdate.locationSide = $('#locationSideText').val();
+                currentDefectToUpdate.damageType = $('#damageTypeText').val();
+                currentDefectToUpdate.reference = $('#referenceText').val();
+                currentDefectToUpdate.reportedBy = $('#reportedByText').val();
+                currentDefectToUpdate.status = $('#statusText').val();
+                currentDefectToUpdate.owner = $('#ownerText').val();
+                currentDefectToUpdate.references = $('#referencesText').val();
+                currentDefectToUpdate.repairType = $('#repairTypeText').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/saveAnnotation',
+                    data: {
+                        data: modelsList
+                    },
+                    success: function (err, obj) {
+                        launch_toast();
+                        api.updateAnnotation(currentAnnotationToUpdate.order, {
+                            title: currentDefectToUpdate.title,
+                            content: currentDefectToUpdate.content
+                        });
+                    }
+                });
+
+            });
+
+            api.addEventListener('viewerready', function () {
+                document.getElementById('topView').addEventListener('click', function () {
+                    api.lookat(
+                            [-2.2871515437687906, -18637.750272658453, 51316.56539364222],
+                            [-2.2020903155, -17439.9461159383, 4671.6332841808],
+                            2
+                    )
+                });
+                document.getElementById('bottomView').addEventListener('click', function () {
+                    api.lookat(
+                            [-26.370203557718355, -18639.134719340433, -41974.82235418205],
+                            [-2.2020903155, -17439.9461159383, 4671.6332841808],
+                            2
+                    )
+                });
+                getModelsDetails();
+                var currentModel = modelsList.filter(obj => {
+                    return (obj.aircraftmodel === currentAircraftmodelSelected && obj.airline === currentAirlineSelected &&
+                            obj.registrationCode === currentRegistrationCodeSelected)
+                });
+                api.removeAnnotation(0);
+                if (currentModel[0]) {
+                    currentModel[0].defectsDetails.forEach(function (obj) {
+                        if (obj.order !== 0) {
+                            api.createAnnotation(
+                                    [obj.pox, obj.poy, obj.poz],
+                                    [obj.nox, obj.noy, obj.noz],
+                                    obj.camPos,
+                                    obj.camTarget,
+                                    obj.title,
+                                    obj.content,
+                                    function (index) {
+                                        // console.log('added hotspot: ' + index);
+                                        // api.removeAnnotation(index);
+                                    }
+                            );
+                        } else {
+                            api.updateAnnotation(0, {
+                                title: obj.title,
+                                content: obj.content
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    };
+    // Methods
+    function getAnnotationDetails(index) {
+        var currentModel = modelsList.filter(obj => {
+            return (obj.aircraftmodel === currentAircraftmodelSelected && obj.airline === currentAirlineSelected && obj.registrationCode ===
+                    currentRegistrationCodeSelected)
+        });
+        return currentModel[0].defectsDetails[index];
+    }
+
+    function checkForModel(annotationToAdd) {
+        var currentModel = modelsList.filter(obj => {
+            return (obj.aircraftmodel === currentAircraftmodelSelected && obj.airline === currentAirlineSelected && obj.registrationCode ===
+                    currentRegistrationCodeSelected)
+        });
+        if (currentModel.length === 0) {
+            modelDetails = {
+                aircraftmodel: currentAircraftmodelSelected,
+                airline: currentAirlineSelected,
+                registrationCode: currentRegistrationCodeSelected,
+                defectsDetails: [annotationToAdd]
+            };
+            currentDefectToUpdate = modelDetails;
+            modelsList.push(modelDetails);
+        } else {
+            currentDefectToUpdate = currentModel[0];
+            currentModel[0].defectsDetails.push(annotationToAdd);
+        }
+    };
+
+    function clearForm() {
+        $('#defectIdText').val('');
+        $('#damagedDescriptionText').val('');
+        $('#dateText').val('');
+        $('#classificationText').val('');
+        $('#damagedComponentText').val('');
+        $('#mobileElementText').val('');
+        $('#locationSideText').val('');
+        $('#damageTypeText').val('');
+        $('#referenceText').val('');
+        $('#reportedByText').val('');
+        $('#statusText').val('');
+        $('#ownerText').val('');
+        $('#referencesText').val('');
+        $('#repairTypeText').val('');
+        sketchFabAPI.unselectAnnotation();
+        //document.getElementById('saveAnno').disabled = true;
+    };
+
+    function setFormDetails(info) {
+        if (info) {
+            $('#defectIdText').val(info.title);
+            $('#damagedDescriptionText').val(info.content);
+            $('#dateText').val(info.date);
+            $('#classificationText').val(info.classification);
+            $('#damagedComponentText').val(info.damagedComponent);
+            $('#mobileElementText').val(info.mobileElement);
+            $('#locationSideText').val(info.locationSide);
+            $('#damageTypeText').val(info.damageType);
+            $('#referenceText').val(info.reference);
+            $('#reportedByText').val(info.reportedBy);
+            $('#statusText').val(info.status);
+            $('#ownerText').val(info.owner);
+            $('#referencesText').val(info.references);
+            $('#repairTypeText').val(info.repairType);
+        }
+    };
+
+    function onLoadmodel() {
+        clearForm();
+        getModelsDetails();
+        document.getElementById('api-frame').src += '';
+        client = new Sketchfab(document.getElementById('api-frame'));
+        //document.getElementById('api-frame').contentWindow.location.reload();
+        client.init(urlid, {
+            success: onSuccess,
+            error: onError,
+            annotation: 0,
+            annotations_visible: 1,
+            ui_controls: 0
+
+        });
+        document.getElementById('markAnno').disabled = false;
+        document.getElementById('saveAnno').disabled = false;
+    };
+
+    function onError(error) {
+        console.log(error);
+    };
+
+    function getModelsDetails() {
+        currentAircraftmodelSelected = $('#aircraftmodel').val();
+        currentAirlineSelected = $('#airline').val();
+        currentRegistrationCodeSelected = $('#registration').val();
+    };
+
+    function launch_toast() {
+
+        var x = document.getElementById("toast")
+        x.className = "show";
+        setTimeout(function () {
+            x.className = x.className.replace("show", "");
+        }, 2000);
+    }
+
+
+
+
+    function init() {
+        var jqxhr = jQuery.get("/getAnnotations", function (data) {
+            console.log('success');
+        })
+                .done(function (dataDone) {
+                    getModelsDetails();
+                    if (dataDone != '') {
+                        modelsList = JSON.parse(dataDone);
+                    } else {
+                        modelsList = [];
+                    }
+
+                    client.init(urlid, {
+                        success: onSuccess,
+                        error: onError,
+                        annotation: 0,
+                        annotations_visible: 1,
+                        ui_controls: 0
+                    });
+                })
+                .fail(function () {
+                    console.log("error");
+                })
+                .always(function () {
+                    console.log("finished");
+                });
+
+    };
+    init();
+</script>
+
+</body>
+
+</html>

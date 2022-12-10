@@ -119,9 +119,9 @@ app.get('/getAnnotations', function (request, response) {
 })
 
 
-var server = app.listen(process.env.PORT || 8080, function () {
-	var host = server.address().address;
-	var port = server.address().port;
+var index = app.listen(process.env.PORT || 8080, function () {
+	var host = index.address().address;
+	var port = index.address().port;
 	var serverUrl = 'http://' + host + ':' + port;
 	console.log('Example app listening at %s', serverUrl);
 })
